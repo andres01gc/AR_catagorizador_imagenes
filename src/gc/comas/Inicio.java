@@ -27,14 +27,18 @@ public class Inicio {
         //creo las carpetas donde reposarán las imagenes
 
         for (String _ruta_img : pathImagenes) {
+//            System.out.println(_ruta_img);
+
             for (String[] _datos_por_linea : datosLinea) {
+//                System.out.println(_datos_por_linea[0]);
                 //comparo el nombre de la imagen con el guardado en el csv.
+                if (new File(_ruta_img).getName().contains(_datos_por_linea[0])) {
+//                    System.out.println(_datos_por_linea[0]);
 
-                if (_ruta_img.contains(_datos_por_linea[0])) {
-                    //la imagen existe en el CSV!
+//                    //la imagen existe en el CSV!
                     boolean existe_cat = false;
-                    //busco la categoria y la comparo con la imagen.
-
+//                    //busco la categoria y la comparo con la imagen.
+//
                     for (String l : categorias_botellas) {
                         //comparo si la categoria de la imagen existe en las categorias de las botellas
                         if (_datos_por_linea[1].equals(l)) {
@@ -55,7 +59,7 @@ public class Inicio {
                             }
                         }
                     }
-//                 parece que esa imagen no tiene categoria
+////                 parece que esa imagen no tiene categoria
                     if (!existe_cat) {
                         try {
                             copyFile(new File(_ruta_img), new File(saveFile + "//Sin clasificar//" + new File(_ruta_img).getName()));
@@ -63,6 +67,8 @@ public class Inicio {
                         }
                         //copiar esa imagen en una carpeta no clasificada.
                     }
+                    break;
+
                 }
             }
         }
@@ -91,27 +97,28 @@ public class Inicio {
         // Cargo el archivo csv
         try {
             in = new BufferedReader(new FileReader(path));
+
             line = in.readLine();//leo la primera linea de los titlos
             // divido la linea
             String[] partes_linea = line.split(",");
             //elimino los espacios de los titulos
+
             for (int i = 0; i < partes_linea.length; i++) {
                 partes_linea[i] = partes_linea[i].trim();
             }
-
-//            List<String> _partes_lineas = Arrays.asList(partes_linea);
-
 
         } catch (IOException e) {
             e.printStackTrace();
         }
 
         boolean act = true;
+
         while (act) {
             try {
                 if ((line = in.readLine()) != null) {
 //                    System.out.println(line);
                     String[] data_partes = line.split(",");
+//                    System.out.println(data_partes[0]);
                     datosLinea.add(data_partes);
                     _categorias_botellas.add(data_partes[1].trim());
                 } else {
@@ -122,7 +129,9 @@ public class Inicio {
                 e.printStackTrace();
             }
         }
+
         categorias_botellas = new ArrayList<>(_categorias_botellas);
+
         try {
             in.close();
         } catch (IOException e) {
