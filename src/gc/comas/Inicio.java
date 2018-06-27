@@ -20,7 +20,7 @@ public class Inicio {
     Inicio() {
         cargarCsv("E:\\Gc\\Trabajo\\Arce\\Botellas\\code.csv");
         cargarPathsTodasImagenes("E:\\Gc\\Trabajo\\Arce\\Botellas\\Imagenes_Finales\\Todas\\normal"); //done!
-        separarImagenesPorCategoria(new File("E:\\Gc\\Trabajo\\Arce\\Botellas\\Codes\\Resultados\\"));
+        separarImagenesPorCategoria(new File("E:\\Gc\\Trabajo\\Arce\\Botellas\\Codes\\Resultados\\cropped"));
     }
 
     void separarImagenesPorCategoria(File saveFile) {
@@ -28,21 +28,17 @@ public class Inicio {
 
         for (String _ruta_img : pathImagenes) {
 //            System.out.println(_ruta_img);
-
+            boolean existe_doc = false;
             for (String[] _datos_por_linea : datosLinea) {
-//                System.out.println(_datos_por_linea[0]);
                 //comparo el nombre de la imagen con el guardado en el csv.
-                if (new File(_ruta_img).getName().contains(_datos_por_linea[0])) {
-//                    System.out.println(_datos_por_linea[0]);
+                if (new File(_ruta_img).getName().contains(_datos_por_linea[0].trim())) {
+                    existe_doc = true;
+                    //la imagen existe en el CSV!
+                    //busco la categoria y la comparo con la imagen.
 
-//                    //la imagen existe en el CSV!
-                    boolean existe_cat = false;
-//                    //busco la categoria y la comparo con la imagen.
-//
                     for (String l : categorias_botellas) {
                         //comparo si la categoria de la imagen existe en las categorias de las botellas
                         if (_datos_por_linea[1].equals(l)) {
-                            existe_cat = true;
                             try {
                                 // copio la imagen a la nueva carpeta
                                 File f = new File(saveFile.getPath() + "//" + l);
@@ -50,7 +46,6 @@ public class Inicio {
                                 if (!f.exists()) {
                                     f.mkdir();
                                 }
-
                                 copyFile(new File(_ruta_img), new File(saveFile.getPath() + "//" + l + "//" + new File(_ruta_img).getName()));
                                 break;
                             } catch (IOException e) {
@@ -59,21 +54,28 @@ public class Inicio {
                             }
                         }
                     }
-////                 parece que esa imagen no tiene categoria
-                    if (!existe_cat) {
-                        try {
-                            copyFile(new File(_ruta_img), new File(saveFile + "//Sin clasificar//" + new File(_ruta_img).getName()));
-                        } catch (IOException e) {
-                        }
-                        //copiar esa imagen en una carpeta no clasificada.
-                    }
                     break;
+                }
+            }
+            System.out.println(new File(_ruta_img).getName());
 
+            if (!existe_doc) {
+                System.out.println("Parece que esta imagen no existe");
+                String l = "Sin Clasificar";
+                File f = new File(saveFile.getPath() + "//" + l);
+
+                if (!f.exists()) {
+                    f.mkdir();
+                }
+
+                try {
+                    copyFile(new File(_ruta_img), new File(saveFile.getPath() + "//" + l + "//" + new File(_ruta_img).getName()));
+                } catch (IOException e) {
+                    e.printStackTrace();
                 }
             }
         }
     }
-
 
     void cargarPathsTodasImagenes(String pathCarpetaImagenes) {
         File principalFile = new File(pathCarpetaImagenes);
