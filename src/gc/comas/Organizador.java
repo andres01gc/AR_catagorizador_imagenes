@@ -12,12 +12,12 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class Inicio {
+public class Organizador {
     private List<String> pathImagenes = new ArrayList<>();
     private List<String[]> datosLinea = new ArrayList<>();
     private ArrayList<String> categorias_botellas;
 
-    Inicio() {
+    Organizador() {
         cargarCsv("E:\\Gc\\Trabajo\\Arce\\Botellas\\code.csv");
         cargarPathsTodasImagenes("E:\\Gc\\Trabajo\\Arce\\Botellas\\Imagenes_Finales\\Todas\\normal"); //done!
         separarImagenesPorCategoria(new File("E:\\Gc\\Trabajo\\Arce\\Botellas\\Codes\\Resultados\\cropped"));
